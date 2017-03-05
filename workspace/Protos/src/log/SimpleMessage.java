@@ -1,9 +1,9 @@
-package guia_0;
+package log;
 
 import java.util.Date;
 
-import guia_0.Log.Level;
-import guia_0.Log.Message;
+import log.Log.Level;
+import log.Log.Message;
 
 public class SimpleMessage implements Message {
 	

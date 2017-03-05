@@ -22,6 +22,7 @@ public class StringConstructors {
 		System.out.println(new String(strBytesUTF8, "UTF-16LE"));
 		System.out.println(new String(strBytesUTF16));
 		System.out.println(new String(strBytesUTF16, "UTF-16LE"));
+		
+		System.out.println(new String(Character.toChars(0x1F355)));
 	}
-
 }

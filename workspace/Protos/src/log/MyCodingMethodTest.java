@@ -1,4 +1,4 @@
-package guia_0;
+package log;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import guia_0.Log.Message;
+import log.Log.Message;
 
 public class MyCodingMethodTest {
 

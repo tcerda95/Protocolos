@@ -1,4 +1,4 @@
-package guia_0;
+package log;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;

@@ -1,6 +1,6 @@
-package guia_0;
+package log;
 
-import guia_0.Log.Message;
+import log.Log.Message;
 
 public interface CodingMethod {
 	public String encode(Log.Message message);
