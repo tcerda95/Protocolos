@@ -1,4 +1,4 @@
-package guia_0;
+package tp0;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -23,6 +23,7 @@ public class StringConstructors {
 		System.out.println(new String(strBytesUTF16));
 		System.out.println(new String(strBytesUTF16, "UTF-16LE"));
 		
+		System.out.println("\u1F355\u146F");
 		System.out.println(new String(Character.toChars(0x1F355)));
 	}
 }

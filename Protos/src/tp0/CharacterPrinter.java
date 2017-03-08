@@ -1,4 +1,4 @@
-package guia_0;
+package tp0;
 
 import java.io.IOException;
 import java.io.InputStream;
