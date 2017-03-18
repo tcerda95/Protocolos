@@ -1,4 +1,4 @@
-package log;
+package interfaces;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +12,9 @@ public interface Log {
 	
 	/** registra un mensaje con el nivel info */
 	public void info(String msg);
+	
+	/** registra un mensaje */
+	public void log(Message msg);
 	
 	/** dado un input stream consume uno a uno los mensajes 
 	 * @throws IOException */

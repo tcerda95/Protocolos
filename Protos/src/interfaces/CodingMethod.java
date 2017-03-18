@@ -1,6 +1,6 @@
-package log;
+package interfaces;
 
-import log.Log.Message;
+import interfaces.Log.Message;
 
 public interface CodingMethod {
 	public String encode(Log.Message message);

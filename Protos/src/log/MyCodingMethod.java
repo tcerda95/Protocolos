@@ -2,8 +2,9 @@ package log;
 
 import java.util.Date;
 
-import log.Log.Level;
-import log.Log.Message;
+import interfaces.CodingMethod;
+import interfaces.Log.Level;
+import interfaces.Log.Message;
 
 public class MyCodingMethod implements CodingMethod {
 	public static final String charsetName = "US-ASCII";

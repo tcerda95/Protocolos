@@ -5,18 +5,26 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.function.Consumer;
+
+import interfaces.CodingMethod;
+import interfaces.Log;
+import reader.CustomSeparatorReader;
+import writer.SimpleBufferedWriter;
 
 public class Logger implements Log {	
 	private BufferedWriter outputWriter;
 	private CodingMethod codingMethod;
 
-	public Logger(String filename, CodingMethod codingMethod) throws UnsupportedEncodingException, FileNotFoundException {
-		this.outputWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream (filename, true), codingMethod.getCharsetName()));
+	public Logger(OutputStream outputStream, CodingMethod codingMethod) throws UnsupportedEncodingException, FileNotFoundException {
+		this.outputWriter = new SimpleBufferedWriter(outputStream, codingMethod.getCharsetName());
 		this.codingMethod = codingMethod;
+	}
+	
+	public Logger(String filename, CodingMethod codingMethod) throws UnsupportedEncodingException, FileNotFoundException {
+		this(new FileOutputStream(filename, true), codingMethod);
 	}
 	
 	@Override
@@ -31,6 +39,11 @@ public class Logger implements Log {
 		write(message);
 	}
 	
+	@Override
+	public void log(Message msg) {
+		write(msg);
+	}
+	
 	private void write(Message message) {
 		try {
 			outputWriter.write(codingMethod.encode(message));
@@ -42,36 +55,20 @@ public class Logger implements Log {
 
 	@Override
 	public void read(InputStream input, Consumer<Message> consumer) throws IOException {
-		InputStreamReader inputReader = buildInputStreamReader(input);
+		CustomSeparatorReader inputReader = buildCustomSeparatorReader(input);
 		String line;
 		
-		while ((line = readLine(inputReader)).length() > 0)
+		while ((line = inputReader.readIncludeSeparator()).length() > 0)
 			consumer.accept(codingMethod.decode(line));
 	}
 	
-	private InputStreamReader buildInputStreamReader(InputStream input) {
+	private CustomSeparatorReader buildCustomSeparatorReader(InputStream input) {
 		try {
-			return new InputStreamReader(input, codingMethod.getCharsetName());
+			return new CustomSeparatorReader(input, codingMethod.getCharsetName(), codingMethod.getSeparator());
 		}
 		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 			System.err.println("Failed to use given charset.\nUsing default charset");
-			return new InputStreamReader(input);
+			return new CustomSeparatorReader(input, codingMethod.getSeparator());
 		}
-	}
-
-	private String readLine(InputStreamReader input) throws IOException {
-		StringBuilder strBuilder = new StringBuilder();
-		char separatorChar = codingMethod.getSeparator();
-		char c;
-		
-		while ((c = (char) input.read()) != -1 && c != separatorChar) {
-			strBuilder.append(String.valueOf(c));
-		}
-				
-		if (c != -1)
-			strBuilder.append(c);  // append separator
-				
-		return strBuilder.toString();
 	}
 }

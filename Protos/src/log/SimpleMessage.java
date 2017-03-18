@@ -2,8 +2,8 @@ package log;
 
 import java.util.Date;
 
-import log.Log.Level;
-import log.Log.Message;
+import interfaces.Log.Level;
+import interfaces.Log.Message;
 
 public class SimpleMessage implements Message {
 	

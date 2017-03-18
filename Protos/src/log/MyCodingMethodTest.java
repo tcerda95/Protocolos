@@ -7,7 +7,8 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import log.Log.Message;
+import interfaces.Log;
+import interfaces.Log.Message;
 
 public class MyCodingMethodTest {
 
