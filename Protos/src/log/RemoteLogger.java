@@ -74,17 +74,7 @@ public class RemoteLogger implements Log {
 		output.write(encodedMessage.getBytes(codingMethod.getCharsetName()));
 		socket.close();
 	}
-
-	private Socket buildSocket() throws IOException {
-		return new Socket(address, port);
-	}
-
-	@Override
-	public void read(InputStream input, Consumer<Message> consumer) throws IOException {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	public void remoteRead(Consumer<Message> consumer) throws IOException {
 		Socket socket = buildSocket();
 		sendReadRequest(socket);
@@ -106,5 +96,15 @@ public class RemoteLogger implements Log {
 		String line;
 		while (!(line = reader.readIncludeSeparator()).startsWith(END_READ))
 			consumer.accept(codingMethod.decode(line));
+	}
+	
+	private Socket buildSocket() throws IOException {
+		return new Socket(address, port);
+	}
+	
+	@Override
+	public void read(InputStream input, Consumer<Message> consumer) throws IOException {
+		// TODO Auto-generated method stub
+
 	}
 }
