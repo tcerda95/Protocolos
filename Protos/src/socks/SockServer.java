@@ -6,7 +6,7 @@ import java.net.InetAddress;
 import connection.tcp.ThreadedSocketServer;
 
 public class SockServer extends ThreadedSocketServer {
-	private final static int DEFAULT_PORT = 1080;
+	private final static int DEFAULT_PORT = 10000;
 	private final static String DEFAULT_HOST = "localhost";
 	
 	public SockServer() throws IOException {

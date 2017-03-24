@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public class CustomSeparatorReader extends BufferedReader {
 	char separator;
@@ -12,6 +13,10 @@ public class CustomSeparatorReader extends BufferedReader {
 	public CustomSeparatorReader(InputStream input, String charsetName, char separator) throws UnsupportedEncodingException {
 		super(new InputStreamReader(input, charsetName));
 		this.separator = separator;
+	}
+
+	public CustomSeparatorReader(InputStream input, Charset charset, char separator) throws UnsupportedEncodingException {
+		this(input, charset.name(), separator);
 	}
 	
 	public CustomSeparatorReader(InputStream input, char separator) {

@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 
 import interfaces.ConnectionHandler;
 
-public class ThreadedPoolSocketServer {
+public class ThreadedPoolSocketServer implements Runnable {
 	private final static int BACKLOG = 50;
 	private static final int POOL_SIZE = 20;
 	
@@ -18,9 +18,13 @@ public class ThreadedPoolSocketServer {
 		this.handler = handler;
 	}
 	
-	public void run() throws IOException {
+	public void run() {
 		for (int i = 0; i < POOL_SIZE; i++) {
-			new Thread(new IterativeSocketServer(serverSocket, handler)).start();
+			try {
+				new Thread(new IterativeSocketServer(serverSocket, handler)).start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
