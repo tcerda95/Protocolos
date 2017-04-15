@@ -63,8 +63,9 @@ public class Request {
 
 	private void decodeDomainName(IterativeInputStream input) throws IOException {
 		int len = input.read();
-		input.read(buffer, HEADER_LEN, len);
-		String domainName = new String(buffer, HEADER_LEN, len, "US-ASCII");
+		buffer[HEADER_LEN] = (byte) len;
+		input.read(buffer, HEADER_LEN + 1, len);
+		String domainName = new String(buffer, HEADER_LEN + 1, len, "US-ASCII");
 		
 		destinationAddress = InetAddress.getByName(domainName);
 		addrLen = len+1;

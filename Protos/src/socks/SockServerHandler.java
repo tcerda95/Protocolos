@@ -78,7 +78,6 @@ public class SockServerHandler implements ConnectionHandler {
 		
 		request = new Request(input);
 		replyRequest(request, output);
-		
 	}
 
 	private void replyRequest(Request request, OutputStream output) throws IOException {

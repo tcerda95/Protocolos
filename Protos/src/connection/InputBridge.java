@@ -9,7 +9,7 @@ import java.io.OutputStream;
  * en el OutputStream.
  */
 public class InputBridge implements Runnable {
-	public static final int DEFAULT_BUFFER_SIZE = 4096;
+	public static final int DEFAULT_BUFFER_SIZE = 8192;
 	
 	private InputStream input;
 	private OutputStream output;
