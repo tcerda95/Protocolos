@@ -3,24 +3,22 @@ package nio.http.nonblocking;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 
-public class HttpConnectionAttributes {	
+public abstract class HttpHandler {	
 	private ByteBuffer readBuffer;
 	private ByteBuffer writeBuffer;
 	private ByteBuffer processedBuffer;
-	private HttpProcessor processor;
 	private SelectionKey connectedPeerKey;
 	
-	public HttpConnectionAttributes(ByteBuffer readBuffer, ByteBuffer writeBuffer, ByteBuffer processedBuffer, HttpProcessor processor) {
-		this.readBuffer = readBuffer;
+	public HttpHandler(int readBufferSize, ByteBuffer writeBuffer, ByteBuffer processedBuffer) {
+		this.readBuffer = ByteBuffer.allocate(readBufferSize);
 		this.writeBuffer = writeBuffer;
 		this.processedBuffer = processedBuffer;
-		this.processor = processor;
 	}
 	
-	public HttpConnectionAttributes(int bufSize, HttpProcessor processor) {
-		this(ByteBuffer.allocate(bufSize), ByteBuffer.allocate(bufSize), ByteBuffer.allocate(bufSize), processor);
-	}
-
+	abstract protected void processRead(SelectionKey key);
+	abstract protected void process(ByteBuffer inputBuffer, SelectionKey key);
+	abstract protected void processWrite(ByteBuffer inputBuffer, SelectionKey key);
+	
 	public ByteBuffer getReadBuffer() {
 		return readBuffer;
 	}
@@ -41,15 +39,16 @@ public class HttpConnectionAttributes {
 		this.connectedPeerKey = connectedPeerKey;
 	}
 	
-	public void processRead(SelectionKey key) {
+	public void handleRead(SelectionKey key) {
+		processRead(key);
 		readBuffer.flip();    // pasa a modo lectura
-		processor.process(readBuffer, processedBuffer, key);
+		process(readBuffer, key);
 		readBuffer.compact();  // pasa a modo escritura
 	}
 
-	public void processWrite(SelectionKey key) {
+	public void handleWrite(SelectionKey key) {
 		writeBuffer.flip();
-		processor.processWrite(writeBuffer, key);
+		processWrite(writeBuffer, key);
 		writeBuffer.compact();
 	}
 }
