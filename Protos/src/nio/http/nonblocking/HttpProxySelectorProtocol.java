@@ -17,7 +17,7 @@ public class HttpProxySelectorProtocol {
 		try {
 			SocketChannel socketChannel = ((ServerSocketChannel) key.channel()).accept();
 			socketChannel.configureBlocking(false);
-			socketChannel.register(key.selector(), SelectionKey.OP_READ, new HttpConnectionAttributes(bufSize, new CopyHttpProcessor())); // Leer del cliente
+			socketChannel.register(key.selector(), SelectionKey.OP_READ, new HttpConnectionAttributes(bufSize, new ClientToHostCopyHttpProcessor())); // Leer del cliente
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -27,8 +27,8 @@ public class HttpProxySelectorProtocol {
 	public void handleRead(SelectionKey key) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		HttpConnectionAttributes attributes = (HttpConnectionAttributes) key.attachment();
-		
 		ByteBuffer buffer = attributes.getReadBuffer();
+		
 		try {
 			socketChannel.read(buffer);
 		} catch (IOException e) {
@@ -38,6 +38,23 @@ public class HttpProxySelectorProtocol {
 		
 		// Procesar lo que se leyó 
 		attributes.processRead(key);
+	}
+
+	public void handleConnect(SelectionKey key) {
+		SocketChannel socketChannel = (SocketChannel) key.channel();
+		try {
+			if (socketChannel.finishConnect())
+				key.interestOps(SelectionKey.OP_WRITE);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+			// TODO: response de error al cliente de que no se pudo conectar al servidor
+		}
+	}
+
+	public void handleWrite(SelectionKey key) {
+		HttpConnectionAttributes attributes = (HttpConnectionAttributes) key.attachment();
+		attributes.processWrite(key);
 	}
 
 }

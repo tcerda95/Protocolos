@@ -42,16 +42,20 @@ public class Pruebita {
 				
 				if (key.isAcceptable())
 					protocol.handleAccept(key);
+								
+				if (key.isConnectable())
+					protocol.handleConnect(key);
 				
-				if (key.isReadable())
+				if (key.isValid() && key.isReadable())
 					protocol.handleRead(key);
 				
-				if (key.isConnectable()) {
-					
-				}
-				
-				if ()
+				if (key.isValid() && key.isWritable())  // OJO: tratar casos en los que el servidor pudo haber cerrado la conexión
+					protocol.handleWrite(key);
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		new Pruebita().run(9090);
 	}
 }
