@@ -6,16 +6,20 @@ import java.nio.channels.SocketChannel;
 
 public class NioInputBridge implements Runnable {
 
-	private static int DEFAULT_BUFFER_SIZE = 4096;
+	private static final int DEFAULT_BUFFER_SIZE = 8192;
 	
 	private SocketChannel inputChannel;
 	private SocketChannel outputChannel;
 	private ByteBuffer buffer;
 	
+	public NioInputBridge(SocketChannel inputChannel, SocketChannel outputChannel) {
+		this(inputChannel, outputChannel, DEFAULT_BUFFER_SIZE);
+	}
+	
 	public NioInputBridge(SocketChannel inputChannel, SocketChannel outputChannel, int bufferSize) {
 		this.inputChannel = inputChannel;
 		this.outputChannel = outputChannel;
-		buffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE);
+		buffer = ByteBuffer.allocate(bufferSize);
 	}
 	
 	@Override
@@ -27,7 +31,7 @@ public class NioInputBridge implements Runnable {
 		}
 	}
 
-	private void tryRun() throws IOException {		
+	private void tryRun() throws IOException {
 		while (inputChannel.read(buffer) != -1) {
 			buffer.flip();
 			while (buffer.hasRemaining())
